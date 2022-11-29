@@ -33,6 +33,12 @@ namespace GameFrameWork
 		return System::ChunkWavFree.size() - 1;
 	}
 
+	size_t Storage::AddTTF(TTF_Font* chunk)
+	{
+		System::TTFFree.push_back(chunk);
+		return System::TTFFree.size() - 1;
+	}
+
 	void Storage::PopTexture()
 	{
 		System::TextureFree.pop_back();
@@ -58,6 +64,11 @@ namespace GameFrameWork
 		System::ChunkWavFree.pop_back();
 	}
 
+	void Storage::PopTTF()
+	{
+		System::TTFFree.pop_back();
+	}
+
 	SDL_Texture* Storage::GetTexture(size_t idx)
 	{
 		return System::TextureFree[idx];
@@ -81,5 +92,10 @@ namespace GameFrameWork
 	Mix_Chunk* Storage::GetChunkWav(size_t idx)
 	{
 		return System::ChunkWavFree[idx];
+	}
+
+	TTF_Font* Storage::GetTTF(size_t idx)
+	{
+		return System::TTFFree[idx];
 	}
 }
