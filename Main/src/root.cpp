@@ -47,6 +47,10 @@ namespace GameFrameWork
 			this->PathExecutable("re-stretched.wav"), 128, true);
 		sound.Play();
 
+		Text::AddFontFamily("Inter", this->PathExecutable("OpenSans.ttf"));
+		this->AddComponent<Text>(Text(
+			"Inter", "Hello, World", 40, { 255, 255, 0, 0 }));
+
 		auto& texture = this->AddComponent<Texture>(
 			Texture(this->PathExecutable("test.png")));
 		auto& transform = this->AddComponent<Transform>();
@@ -95,6 +99,8 @@ namespace GameFrameWork
 		auto& texture = this->GetComponent<Texture>();
 		auto& transform = this->GetComponent<Transform>();
 		auto& animation = this->GetComponent<Animation::Map>();
+
+		this->GetComponent<Text>().Render(400, 300 ,true);
 
 		SDL_Rect rect = transform();
 		SDL_RenderCopy(
