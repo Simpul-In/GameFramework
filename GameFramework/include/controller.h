@@ -3,7 +3,9 @@
 
 #include <filesystem>
 
+// @third party code - BEGIN ENTT
 #include <entt/entt.hpp>
+// @third party code - END ENTT
 
 namespace GameFrameWork
 {
@@ -13,6 +15,11 @@ namespace GameFrameWork
 		Controller();
 
 	public:
+		/**
+		 * Add Component
+		 * @tparam Component - Component will add
+		 * @tparam Args - paramaeters
+		 */
 		template <typename T, typename... Args>
 		T& AddComponent(Args&&... args)
 		{
@@ -20,6 +27,11 @@ namespace GameFrameWork
 				std::forward<Args>(args)...);
 		}
 
+		/**
+		 * Check the component is exist
+		 * @tparam Component - Component will check
+		 * @return (True <Exist>) or (False <Not Exist>)
+		 */
 		template <typename T>
 		bool Has()
 		{
@@ -33,12 +45,20 @@ namespace GameFrameWork
 			return false;
 		}
 
+		/**
+		 * Get Component
+		 * @tparam Component - Component will get
+		 */
 		template<typename T>
 		T& GetComponent()
 		{
 			return this->registry_->get<T>(this->entity_);
 		}
 
+		/**
+		 * Remove Component
+		 * @tparam Component - Component will remove
+		 */
 		template<typename T>
 		void RemoveComponent()
 		{
@@ -46,10 +66,24 @@ namespace GameFrameWork
 		}
 
 	public:
+		/**
+		 * Check entity is not null
+		 * @return (True) or (False)
+		 */
 		operator bool() const { return this->entity_ != entt::null; }
+
+		/**
+		 * Get entity
+		 * @return Entity
+		 */
 		operator entt::entity() const { return this->entity_; }
 
 	protected:
+		/**
+		 * Join Target Path With Path Executable
+		 * @param path - Target Path will join with Path Executable
+		 * @return path had joined
+		 */
 		std::filesystem::path PathExecutable(std::filesystem::path path);
 
 	private:

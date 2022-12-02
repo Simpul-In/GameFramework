@@ -2,7 +2,10 @@
 #define GAME_FRAMEWORK_COMPONENT_H_
 
 #include <ctype.h>
+
+// @third party code - BEGIN SDL2
 #include <SDL.h>
+// @third party code - END SDL2
 
 namespace GameFrameWork
 {
@@ -15,7 +18,14 @@ namespace GameFrameWork
 				size_t Width;
 				size_t Height;
 
+				/** Intialize Size */
 				Size() : Width(0), Height(0) {}
+				
+				/**
+				 * Intialize Size
+				 * @param width - Move Width <size_t>
+				 * @param height - Move Height <size_t>
+				 */
 				Size(size_t  width, size_t height)
 					: Width(width), Height(height) {}
 			};
@@ -28,7 +38,14 @@ namespace GameFrameWork
 				float Width;
 				float Height;
 
+				/** Intialize Size */
 				Size() : Width(0), Height(0) {}
+
+				/**
+				 * Intialize Size
+				 * @param width - Move Width <float>
+				 * @param height - Move Height <float>
+				 */
 				Size(float  width, float height)
 					: Width(width), Height(height) {}
 			};
@@ -43,10 +60,26 @@ namespace GameFrameWork
 				uint8_t b;
 				uint8_t a;
 
+				/** Intialize Color */
 				Color() = default;
+
+				/** Move Color */
 				Color(const Color&) = default;
+
+				/**
+				 * Intialize Color
+				 * @param r - red <uint8_t>
+				 * @param g - green <uint8_t>
+				 * @param b - blue <uint8_t>
+				 * @param a - alpha <uint8_t>
+				 */
 				Color(uint8_t r_, uint8_t g_, uint8_t b_, uint8_t a_)
 					: r(r_), g(g_), b(b_), a(a_) {}
+
+				/**
+				 * Intialize Color
+				 * @param color - Move color <SDL_Color>
+				 */
 				Color(SDL_Color color)
 					: r(color.r), g(color.g), b(color.b), a(color.a) {}
 			};

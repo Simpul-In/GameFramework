@@ -4,15 +4,23 @@
 #include <filesystem>
 #include <vector>
 
+// @third party code - BEGIN ENTT
 #include <entt/entt.hpp>
+// @third party code - END ENTT
 
+// @third party code - BEGIN SDL2
 #include <SDL.h>
 #include <SDL_mixer.h>
 #include <SDL_ttf.h>
+// @third party code - END SDL2
 
+// @third party code - BEGIN OneAPI
 #include <oneapi/tbb.h>
+// @third party code - END OneAPI
 
+// @third party code - BEGIN Box2D
 #include <box2d/box2d.h>
+// @third party code - END Box2D
 
 #include "./config.h"
 
@@ -21,26 +29,49 @@ namespace GameFrameWork
 	class System
 	{
 	public:
+		/**
+		 * Texture to load an image
+		 * @param config - Config of game at <config.h>
+		 * @param argv - Argv of command line
+		 */
 		System(Config_ config, char** argv);
 
 	public:
+		/** Intialize dependencies */
 		void Initialize();
+
+		/** Application is end */
 		void Exit();
 
 	public:
+		/** Create Window <SDL_Window*> */
 		void CreateWindow_();
+		
+		/** Create Renderer <SDL_Renderer*> */
 		void CreateRenderer();
+
+		/** 
+		 * Checking window and renderer is good 
+		 * @return if give (True) or bad (False)
+		 */
 		bool CheckIsGood();
 
 	private:
+		/** Clear display */
 		inline void Clear();
+
+		/** Render or show into a display */
 		inline void Show();
 
 	private:
+		/** Just prototype to handle event */
 		void HandleEvent();
+		
+		/** Just prototype to handle renderer */
 		void HandleRenderer();
 
 	public:
+		/** Run program */
 		void Run();
 
 	public:

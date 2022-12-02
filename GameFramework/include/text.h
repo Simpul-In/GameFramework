@@ -5,8 +5,10 @@
 #include <filesystem>
 #include <map>
 
+// @third party code - BEGIN SDL2
 #include <SDL.h>
 #include <SDL_ttf.h>
+// @third party code - END SDL2
 
 #include "controller.h"
 #include "component.h"

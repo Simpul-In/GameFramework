@@ -5,7 +5,9 @@
 #include <vector>
 #include <map>
 
+// @third party code - BEGIN OneAPI
 #include <oneapi/tbb.h>
+// @third party code - END OneAPI
 
 #include <SDL.h>
 

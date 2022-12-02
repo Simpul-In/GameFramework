@@ -4,7 +4,9 @@
 #include <filesystem>
 #include <vector>
 
+// @third party code - BEGIN SDL2
 #include <SDL_mixer.h>
+// @third party code - END SDL2
 
 #include "controller.h"
 #include "component.h"

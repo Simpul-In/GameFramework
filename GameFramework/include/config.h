@@ -4,10 +4,14 @@
 #include <filesystem>
 #include <string>
 
+// @third party code - BEGIN SDL2
 #include <SDL_image.h>
 #include <SDL_mixer.h>
+// @third party code - End SDL2
 
+// @third party code - BEGIN Box2D
 #include <box2d/box2d.h>
+// @third party code - END Box2D
 
 #include "component.h"
 
@@ -54,7 +58,11 @@ namespace GameFrameWork
 		bool ResizeWindow = false;
 		
 		size_t FPS = 60;
-		SDL_Color Background = { 255, 255, 255, 0 };
+		SDL_Color Background = {
+			/*red=*/255, 
+			/*green=*/255, 
+			/*blue=*/255, 
+			/*alpha=*/0 };
 		
 		PhysicsConfig Physics;
 		SoundProccessing Sound;
