@@ -1,6 +1,8 @@
 #include <iostream>
 
+// @third party code - BEGIN SDL2
 #include <SDL.h>
+// @third party code - END SDL2
 
 #include "../include/config.h"
 #include "../include/system.h"

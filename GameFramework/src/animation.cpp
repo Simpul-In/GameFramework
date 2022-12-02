@@ -5,7 +5,9 @@
 #include <filesystem>
 #include <future>
 
+// @third party code - BEGIN NLOHMANN/JSON
 #include <nlohmann/json.hpp>
+// @third party code - END NLOHMANN/JSON
 
 #include "../include/animation.h"
 

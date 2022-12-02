@@ -3,39 +3,39 @@
 
 namespace GameFrameWork
 {
-	size_t Storage::AddTexture(SDL_Texture* texture)
+	size_t Storage::AddTexture(TextureImage texture)
 	{
 		System::TextureFree.push_back(texture);
 		return System::TextureFree.size() - 1;
 	}
 
-	size_t Storage::AddSurface(SDL_Surface* texture)
+	size_t Storage::AddSurface(Surface surface)
 	{
-		System::SurfaceFree.push_back(texture);
+		System::SurfaceFree.push_back(surface);
 		return System::SurfaceFree.size() - 1;
 	}
 	
-	size_t Storage::AddTrash(void* texture)
+	size_t Storage::AddTrash(Data data)
 	{
-		System::TrashFree.push_back(texture);
-		return System::TextureFree.size() - 1;
+		System::TrashFree.push_back(data);
+		return System::TrashFree.size() - 1;
 	}
 
-	size_t Storage::AddChunkMusic(Mix_Music* chunk)
+	size_t Storage::AddChunkMusic(ChunkMusic music)
 	{
-		System::ChunkMusicFree.push_back(chunk);
+		System::ChunkMusicFree.push_back(music);
 		return System::ChunkMusicFree.size() - 1;
 	}
 
-	size_t Storage::AddChunkWav(Mix_Chunk* chunk)
+	size_t Storage::AddChunkWav(ChunkWAV chunk)
 	{
 		System::ChunkWavFree.push_back(chunk);
 		return System::ChunkWavFree.size() - 1;
 	}
 
-	size_t Storage::AddTTF(TTF_Font* chunk)
+	size_t Storage::AddTTF(TextFont font)
 	{
-		System::TTFFree.push_back(chunk);
+		System::TTFFree.push_back(font);
 		return System::TTFFree.size() - 1;
 	}
 
@@ -69,32 +69,32 @@ namespace GameFrameWork
 		System::TTFFree.pop_back();
 	}
 
-	SDL_Texture* Storage::GetTexture(size_t idx)
+	TextureImage Storage::GetTexture(size_t idx)
 	{
 		return System::TextureFree[idx];
 	}
 
-	SDL_Surface* Storage::GetSurface(size_t idx)
+	Surface Storage::GetSurface(size_t idx)
 	{
 		return System::SurfaceFree[idx];
 	}
 
-	void* Storage::GetTrash(size_t idx)
+	Data Storage::GetTrash(size_t idx)
 	{
 		return System::TrashFree[idx];
 	}
 
-	Mix_Music* Storage::GetChunkMusic(size_t idx)
+	ChunkMusic Storage::GetChunkMusic(size_t idx)
 	{
 		return System::ChunkMusicFree[idx];
 	}
 
-	Mix_Chunk* Storage::GetChunkWav(size_t idx)
+	ChunkWAV Storage::GetChunkWav(size_t idx)
 	{
 		return System::ChunkWavFree[idx];
 	}
 
-	TTF_Font* Storage::GetTTF(size_t idx)
+	TextFont Storage::GetTTF(size_t idx)
 	{
 		return System::TTFFree[idx];
 	}

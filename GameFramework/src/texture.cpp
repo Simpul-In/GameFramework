@@ -1,7 +1,9 @@
 #include <filesystem>
 #include <utility>
 
+// @third party code - BEGIN OneAPI
 #include <oneapi/tbb.h>
+// @third party code - END OneAPI
 
 #include "../include/system.h"
 #include "../include/texture.h"
@@ -86,13 +88,13 @@ namespace GameFrameWork
 		}
 	}
 
-	SDL_Surface* Texture::GetSurface()
+	Surface Texture::GetSurface()
 	{
 		auto& config = this->GetComponent<TextureConfig>();
 		return Storage::GetSurface(config.IdSurface);
 	}
 
-	SDL_Texture* Texture::GetTexture()
+	TextureImage Texture::GetTexture()
 	{
 		auto& config = this->GetComponent<TextureConfig>();
 		return Storage::GetTexture(config.IdTexture);

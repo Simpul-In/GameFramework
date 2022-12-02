@@ -3,9 +3,13 @@
 #include <filesystem>
 #include <fstream>
 
+// @third party code - BEGIN NLOHMANN/JSON
 #include <nlohmann/json.hpp>
+// @third party code - END NLOHMANN/JSON
 
+// @third party code - BEGIN OneAPI
 #include <oneapi/tbb.h>
+// @third party code - END OneAPI
 
 #include "../include/map.h"
 

@@ -1,9 +1,13 @@
 #include <iostream>
 #include <utility>
 
+// @third party code - BEGIN SDL2
 #include <SDL.h>
+// @third party code - END SDL2
 
+// @third party code - BEGIN OneAPI
 #include <oneapi/tbb.h>
+// @third party code - END OneAPI
 
 #include "../include/system.h"
 #include "../../Main/include/root.h"

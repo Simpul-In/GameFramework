@@ -1,4 +1,6 @@
+// @third party code - BEGIN Box2D
 #include <box2d/box2d.h>
+// @third party code - END Box2D
 
 #include "../include/system.h"
 #include "../include/controller.h"

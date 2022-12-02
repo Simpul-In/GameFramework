@@ -2,9 +2,13 @@
 #include <filesystem>
 #include <fstream>
 
+// @third party code - BEGIN NLOHMANN/JSON
 #include <nlohmann/json.hpp>
+// @third party code - END NLOHMANN/JSON
 
+// @third party code - BEGIN SDL2
 #include <SDL.h>
+// @third party code - END SDL2
 
 #include "../include/tile.h"
 #include "../include/system.h"

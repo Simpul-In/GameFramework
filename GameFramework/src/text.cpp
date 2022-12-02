@@ -1,6 +1,8 @@
 #include <utility>
 
+// @third party code - BEGIN OneAPI
 #include <oneapi/tbb.h>
+// @third party code - END OneAPI
 
 #include "../include/text.h"
 #include "../include/component.h"
