@@ -15,27 +15,59 @@ namespace GameFrameWork
 {
 	namespace Map
 	{
+		/** To Store Data */
 		struct TextureMapID
 		{
 			size_t ID;
 			SDL_Rect Rect;
 		};
 
+		/** To Mapping the Texture */
 		class Texture
 		{
 		public:
+			/** Intialize Map Texture */
 			Texture() = default;
+			
+			/**
+			 * Intialize with load data from file
+			 * @param path - path file data map (.json)
+			 */
 			Texture(std::filesystem::path path);
 
 		public:
+			/**
+			 * Add Rect Map 
+			 * @param map - data { id, rect }
+			 */
 			void Push(TextureMapID map);
-			void Push(std::vector<TextureMapID> map);
+
+			/**
+			 * Add Rect Maps
+			 * @param maps - data [{ id, rect }]
+			 */
+			void Push(std::vector<TextureMapID> maps);
 
 		public:
+			/**
+			 * Make Rect Map
+			 * @param rect - { x, y, w, h }
+			 * @return Map { id, rect }
+			 */
 			TextureMapID Make(SDL_Rect rect);
+
+			/**
+			 * Get Maps
+			 * @param ids - [id]
+			 * @return rects [{ x, y, w, h }]
+			 */
 			std::vector<SDL_Rect> Select(std::vector<size_t> IDS);
 
 		public:
+			/**
+			 * Write all data into a file
+			 * @param path - where the file will make
+			 */
 			void MakeIntoFile(std::filesystem::path path);
 
 		public:

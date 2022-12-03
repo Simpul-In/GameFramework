@@ -6,6 +6,7 @@
 // @third party code - END Box2D
 
 #include "controller.h"
+#include "typedef.h"
 
 namespace GameFrameWork
 {
@@ -14,12 +15,18 @@ namespace GameFrameWork
 		class Core : public Controller
 		{
 		public:
+			/** Intialize Core */
 			Core();
 
 		public:
-			b2World* operator()();
+			/**
+			 * Get World
+			 * @return PhysicsWorld <b2World*>
+			 */
+			PhysicsWorld operator()();
 
 		public:
+			/** Update physics */
 			void Update();
 		};
 	}

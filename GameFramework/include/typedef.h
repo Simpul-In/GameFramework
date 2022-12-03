@@ -7,6 +7,10 @@
 #include <SDL_ttf.h>
 // @third party code - END SDL2
 
+// @third party code - BEGIN Box2D
+#include <box2d/box2d.h>
+// @third party code - END Box2D
+
 namespace GameFrameWork
 {
 	typedef SDL_Surface* Surface;
@@ -15,6 +19,7 @@ namespace GameFrameWork
 	typedef TTF_Font* TextFont;
 	typedef Mix_Chunk* ChunkWAV;
 	typedef Mix_Music* ChunkMusic;
+	typedef b2World* PhysicsWorld;
 }
 
 #endif // GAME_FRAMEWORK_TYPEDEF_H_
