@@ -1,6 +1,7 @@
 #ifndef GAME_FRAMEWORK_COMPONENT_H_
 #define GAME_FRAMEWORK_COMPONENT_H_
 
+#include <string>
 #include <ctype.h>
 
 // @third party code - BEGIN SDL2
@@ -82,6 +83,25 @@ namespace GameFrameWork
 				 */
 				Color(SDL_Color color)
 					: r(color.r), g(color.g), b(color.b), a(color.a) {}
+
+				/** Compare color */
+				bool operator==(const Color& color)
+				{
+					return (
+						(this->r == color.r) && (this->g == color.g) &&
+						(this->b == color.b) && (this->a == color.a));
+				}
+
+				/** Get SDL_Color */
+				SDL_Color operator()()
+				{
+					return SDL_Color({
+						.r = this->r,
+						.g = this->g,
+						.b = this->b,
+						.a = this->a,
+					});
+				}
 			};
 		}
 
