@@ -1,86 +1,124 @@
 #include <iostream>
+#include <vector>
 
+// @third party code - BEGIN SDL2
 #include <SDL.h>
+// @third party code - END SDL2
 
+// @system include - BEGIN
 #include <system.h>
-#include <texture.h>
-#include <animation.h>
-#include <sound.h>
 #include <text.h>
-
-#include <box2d/box2d.h>
+// @system include - END
 
 #include "../include/root.h"
+#include "../include/controller.h"
 
 namespace GameFrameWork
 {
-	struct Transform
+	/** Help Render Text */
+	struct HelperText
 	{
-		struct
-		{
-			float Width;
-			float Height;
-		} Size;
-		struct
-		{
-			float x;
-			float y;
-		} Position;
+		std::vector<Text> Texts;
+		std::vector<SDL_Point> Points;
+	};
 
-		SDL_Rect operator()()
-		{
-			SDL_Rect rect;
-			rect.x = static_cast<int>(this->Position.x);
-			rect.y = static_cast<int>(this->Position.y);
-			rect.w = static_cast<int>(this->Size.Width);
-			rect.h = static_cast<int>(this->Size.Height);
+	struct BouncingBox : public Controller
+	{
+		int velX_ = 1;
+		int velY_ = 1;
+		int speed_ = 1;
 
-			return rect;
+		SDL_Rect shadow_;
+		int offsetShadow_ = 3;
+
+		BouncingBox() : Controller()
+		{
+			auto& rect = this->AddComponent<SDL_Rect>();
+			
+			// settings
+			rect.x = 1;
+			rect.y = 1;
+			rect.w = 40;
+			rect.h = 40;
+
+			shadow_ = rect;
+		}
+
+		/** Logic */
+		void Update()
+		{
+			auto& rect = this->GetComponent<SDL_Rect>();
+
+			if (rect.y + rect.h >= System::Config.Size.Height ||
+				rect.y <= 0)
+			{
+				velY_ *= -1;
+			}
+
+			if (rect.x + rect.w >= System::Config.Size.Width ||
+				rect.x <= 0)
+			{
+				velX_ *= -1;
+			}
+
+			rect.x += speed_ * velX_;
+			rect.y += speed_ * velY_;
+
+			shadow_.x = rect.x + (offsetShadow_ * velX_ * -1);
+			shadow_.y = rect.y + (offsetShadow_ * velY_ * -1);
+		}
+
+		/** Render box */
+		void Render()
+		{
+			// Shadow
+			SDL_SetRenderDrawColor(
+				System::Renderer, 0xDD, 0xFF, 0xBC, 0x00);
+			SDL_RenderFillRect(System::Renderer, &shadow_);
+
+			// Main Layer
+			SDL_SetRenderDrawColor(
+				System::Renderer, 0xFE, 0xFF, 0xDE, 0x00);
+			SDL_RenderFillRect(
+				System::Renderer, 
+				&this->GetComponent<SDL_Rect>());
 		}
 	};
 
 	void Root::Start()
 	{
+		// Test
 		TestC("Hello, World");
+		
+		// Setting Window
+		System::Config.Background = SDL_Color({ 0xF2, 0xF5, 0xC8 });
 
-		Sound::Wav sound = Sound::Wav(
-			this->PathExecutable("re-stretched.wav"), 128, true);
-		sound.Play();
+		// Add Bouncing Box
+		this->AddComponent<BouncingBox>(BouncingBox());
 
-		Text::AddFontFamily("Inter", this->PathExecutable("OpenSans.ttf"));
-		this->AddComponent<Text>(Text(
-			"Inter", "Hello, World", 40, { 255, 255, 0, 0 }));
+		// Add Font Family
+		Text::AddFontFamily(
+			/*NameFontFamily=*/"OpenSans",
+			/*Path=*/this->PathExecutable("OpenSans.ttf"));
 
-		auto& texture = this->AddComponent<Texture>(
-			Texture(this->PathExecutable("test.png")));
-		auto& transform = this->AddComponent<Transform>();
-		auto& animation = this->AddComponent<Animation::Map>();
+		// Add Texts
+		auto& text = this->AddComponent<HelperText>();
 
-		int nAnimation = 8;
-		animation.Create("default");
-		animation.KeyFrame = "default";
+		// Add Title
+		text.Texts.push_back(Text(
+			/*FontFamily=*/"OpenSans",
+			/*Text=*/"Welcome In GameFrameWork",
+			/*Size=*/32,
+			/*Color=*/{ 0x52, 0x73, 0x4D }));
+		text.Points.push_back({/*x=*/400, /*y=*/270 });
 
-		auto& texSize = texture.GetComponent<Component::Default::Size>();
-		transform.Size.Width = static_cast<float>(texSize.Width / nAnimation);
-		transform.Size.Height = static_cast<float>(texSize.Height);
-		transform.Position.x = 0;
-		transform.Position.y = 0;
-
-		for (size_t i = 0; i != static_cast<size_t>(nAnimation); i++)
-		{
-			SDL_Rect textureID;
-
-			// Size
-			textureID.w = static_cast<int>(transform.Size.Width);
-			textureID.h = static_cast<int>(transform.Size.Height);
-
-			// Position
-			textureID.x = static_cast<int>(
-				i * static_cast<size_t>(transform.Size.Width));
-			textureID.y = 0;
-
-			animation.Push("default", std::move(textureID));
-		}
+		// Add Main Text
+		text.Texts.push_back(Text(
+			/*FontFamily=*/"OpenSans",
+			/*Text=*/"Edit At File \"Main/src/root.cpp\"",
+			/*Size=*/20,
+			/*Color=*/{ 0x91, 0xC7, 0x88 }));
+		text.Points.push_back({/*x=*/400, /*y=*/300 });
 	}
 
 	void Root::Events()
@@ -90,22 +128,22 @@ namespace GameFrameWork
 
 	void Root::Update()
 	{
-		auto& animation = this->GetComponent<Animation::Map>();
-		animation.Update();
+		this->GetComponent<BouncingBox>().Update();
 	}
 
 	void Root::Render()
 	{
-		auto& texture = this->GetComponent<Texture>();
-		auto& transform = this->GetComponent<Transform>();
-		auto& animation = this->GetComponent<Animation::Map>();
+		// Get text
+		auto& text = this->GetComponent<HelperText>();
 
-		this->GetComponent<Text>().Render(400, 300 ,true);
+		this->GetComponent<BouncingBox>().Render();
 
-		SDL_Rect rect = transform();
-		SDL_RenderCopy(
-			System::Renderer, texture.GetTexture(),
-			&animation(), &rect);
+		// Render all texts
+		for (size_t idx = 0; idx < text.Texts.size(); idx++)
+		{
+			auto& point = text.Points[idx];
+			text.Texts[idx].Render(point.x, point.y, true);
+		}
 	}
 
 	void Root::Delete()
