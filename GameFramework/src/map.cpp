@@ -55,17 +55,17 @@ namespace GameFrameWork
 			this->Map[map.ID] = map.Rect;
 		}
 
-		void Texture::Push(std::vector<TextureMapID> map)
+		void Texture::Push(std::vector<TextureMapID> maps)
 		{
 			std::mutex mutex;
 			oneapi::tbb::parallel_for(
-				oneapi::tbb::blocked_range<size_t>(0, map.size()),
+				oneapi::tbb::blocked_range<size_t>(0, maps.size()),
 				[&, this](const oneapi::tbb::blocked_range<size_t>& r) -> void {
 					std::lock_guard<std::mutex> lock(mutex);
 
 					for (size_t i = r.begin(); i != r.end(); ++i)
 					{
-						this->Push(map[i]);
+						this->Push(maps[i]);
 					}
 				});
 		}

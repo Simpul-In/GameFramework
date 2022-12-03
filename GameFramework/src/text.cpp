@@ -104,12 +104,12 @@ namespace GameFrameWork
 		SDL_RenderCopy(System::Renderer, this->texture_, NULL, &rect_);
 	}
 
-	SDL_Texture* Text::GetTexture()
+	TextureImage Text::GetTexture()
 	{
 		return this->texture_;
 	}
 
-	SDL_Surface* Text::GetSurface()
+	Surface Text::GetSurface()
 	{
 		return this->surface_;
 	}

@@ -27,7 +27,7 @@ namespace GameFrameWork
 				static_cast<int32>(System::Config.Physics.PositionIterations));
 		}
 
-		b2World* Core::operator()()
+		PhysicsWorld Core::operator()()
 		{
 			return this->GetComponent<b2World*>();
 		}
