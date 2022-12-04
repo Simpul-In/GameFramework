@@ -31,5 +31,22 @@ namespace GameFrameWork
 		{
 			return this->GetComponent<b2World*>();
 		}
+
+		SDL_Rect Core::GetWorldCenter(
+			Component::Physics::Position position,
+			Component::Physics::Size size)
+		{
+			SDL_Rect rect;
+			
+			// Settings position
+			rect.x = static_cast<int>(position.X - (size.Width * 0.5f));
+			rect.y = static_cast<int>(position.Y - (size.Height * 0.5f));
+
+			// Settings size
+			rect.w = static_cast<int>(size.Width);
+			rect.h = static_cast<int>(size.Height);
+
+			return rect;
+		}
 	}
 }

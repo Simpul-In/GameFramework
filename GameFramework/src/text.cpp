@@ -24,7 +24,7 @@ namespace GameFrameWork
 
 		Storage::AddTexture(this->texture_);
 		Storage::AddSurface(this->surface_);
-		
+
 		this->Load();
 	}
 
@@ -75,11 +75,11 @@ namespace GameFrameWork
 		this->surface_ = TTF_RenderText_Blended(
 			fontFamily.Stores[idx].Font, component.Text.c_str(),
 			SDL_Color({
-				.r = component.Color.r, 
+				.r = component.Color.r,
 				.g = component.Color.g,
-				.b = component.Color.b, 
+				.b = component.Color.b,
 				.a = component.Color.a
-			}));
+				}));
 		this->texture_ = SDL_CreateTextureFromSurface(System::Renderer, this->surface_);
 
 		sizeText.Width = static_cast<size_t>(this->surface_->w);
