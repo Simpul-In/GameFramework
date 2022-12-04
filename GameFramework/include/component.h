@@ -50,6 +50,23 @@ namespace GameFrameWork
 				Size(float  width, float height)
 					: Width(width), Height(height) {}
 			};
+
+			struct Position
+			{
+				float X;
+				float Y;
+
+				/** Intialize Position */
+				Position() : X(0), Y(0) {}
+
+				/**
+				 * Intialize Position
+				 * @param x - Move x <float>
+				 * @param y - Move y <float>
+				 */
+				Position(float  x, float y)
+					: X(x), Y(y) {}
+			};
 		}
 
 		namespace Specific

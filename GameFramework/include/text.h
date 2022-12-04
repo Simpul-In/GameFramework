@@ -56,13 +56,13 @@ namespace GameFrameWork
 		 * @param center - make to center
 		 */
 		void Render(int x, int y, bool center = false);
-		
+
 		/**
 		 * Get Texture
 		 * @return TextureImage <SDL_Texture*>
 		 */
 		TextureImage GetTexture();
-		
+
 		/**
 		 * Get Texture
 		 * @return Surface <SDL_Surface*>

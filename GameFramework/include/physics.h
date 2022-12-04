@@ -6,6 +6,7 @@
 // @third party code - END Box2D
 
 #include "controller.h"
+#include "component.h"
 #include "typedef.h"
 
 namespace GameFrameWork
@@ -17,6 +18,17 @@ namespace GameFrameWork
 		public:
 			/** Intialize Core */
 			Core();
+
+		public:
+			/**
+			 * Get World Center
+			 * @param position - position of object
+			 * @param size - size of object
+			 * @return <SDL_Rect> Just make easy
+			 */
+			static SDL_Rect GetWorldCenter(
+				Component::Physics::Position position,
+				Component::Physics::Size size);
 
 		public:
 			/**
