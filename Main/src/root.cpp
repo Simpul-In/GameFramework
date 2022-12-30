@@ -10,6 +10,7 @@
 #include <text.h>
 #include <physics.h>
 #include <typedef.h>
+#include <experiment/shape.h>
 // @system include - END
 
 #include "../include/root.h"
@@ -100,8 +101,8 @@ namespace GameFrameWork
 			auto& position = this->AddComponent<Component::Physics::Position>();
 			auto& size = this->AddComponent<Component::Physics::Size>();
 
-			position.X = 400;
-			position.Y = 500;
+			position.X = 0;
+			position.Y = 100;
 			size.Width = 200;
 			size.Height = 40;
 
@@ -138,8 +139,10 @@ namespace GameFrameWork
 			auto& position = this->GetComponent<Component::Physics::Position>();
 			auto& size = this->GetComponent<Component::Physics::Size>();
 
-			Rect = std::move(Physics::Core::GetWorldCenter(
-				position, size));
+			Rect.w = static_cast<int>(size.Width);
+			Rect.h = static_cast<int>(size.Height);
+			Rect.x = (static_cast<int>(System::Config.Size.Width / 2) - Rect.w / 2) + static_cast<int>(position.X);
+			Rect.y = (static_cast<int>(System::Config.Size.Height / 2) - Rect.h / 2) + static_cast<int>(position.Y);
 
 			SDL_SetRenderDrawColor(
 				System::Renderer, 0x91, 0xC7, 0x88, 0x00);
@@ -163,8 +166,8 @@ namespace GameFrameWork
 			auto& position = this->AddComponent<Component::Physics::Position>();
 			auto& size = this->AddComponent<Component::Physics::Size>();
 
-			position.X = 400;
-			position.Y = 100;
+			position.X = 0;
+			position.Y = -200;
 			size.Width = 40;
 			size.Height = 40;
 
@@ -173,6 +176,8 @@ namespace GameFrameWork
 			bodyDef.type = b2_dynamicBody;
 			bodyDef.position.Set(position.X, position.Y);
 			b2Body* body = world_->CreateBody(&bodyDef);
+
+			body->SetGravityScale(10.0f);
 
 			b2PolygonShape dynamicBox;
 			dynamicBox.SetAsBox(
@@ -209,8 +214,10 @@ namespace GameFrameWork
 			auto& position = this->GetComponent<Component::Physics::Position>();
 			auto& size = this->GetComponent<Component::Physics::Size>();
 
-			Rect = std::move(Physics::Core::GetWorldCenter(
-				position, size));
+			Rect.w = static_cast<int>(size.Width);
+			Rect.h = static_cast<int>(size.Height);
+			Rect.x = (static_cast<int>(System::Config.Size.Width / 2) - Rect.w / 2) + static_cast<int>(position.X);
+			Rect.y = (static_cast<int>(System::Config.Size.Height / 2) - Rect.h / 2) + static_cast<int>(position.Y);
 
 			SDL_SetRenderDrawColor(
 				System::Renderer, 0xFE, 0xFF, 0xDE, 0x00);
@@ -251,7 +258,7 @@ namespace GameFrameWork
 			/*Text=*/"Welcome In GameFrameWork",
 			/*Size=*/32,
 			/*Color=*/{ 0x52, 0x73, 0x4D }));
-		text.Points.push_back({/*x=*/400, /*y=*/270 });
+		text.Points.push_back({/*x=*/0, /*y=*/-30 });
 
 		// Add Main Text
 		text.Texts.push_back(Text(
@@ -259,7 +266,7 @@ namespace GameFrameWork
 			/*Text=*/"Edit At File \"Main/src/root.cpp\"",
 			/*Size=*/20,
 			/*Color=*/{ 0x91, 0xC7, 0x88 }));
-		text.Points.push_back({/*x=*/400, /*y=*/300 });
+		text.Points.push_back({/*x=*/0, /*y=*/10 });
 	}
 
 	void Root::Events()
@@ -286,7 +293,9 @@ namespace GameFrameWork
 		for (size_t idx = 0; idx < text.Texts.size(); idx++)
 		{
 			auto& point = text.Points[idx];
-			text.Texts[idx].Render(point.x, point.y, true);
+			text.Texts[idx].Render(
+				static_cast<int>(System::Config.Size.Width / 2) + point.x, 
+				static_cast<int>(System::Config.Size.Height / 2) + point.y, true);
 		}
 	}
 

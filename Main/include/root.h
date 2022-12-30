@@ -8,16 +8,26 @@
 
 namespace GameFrameWork
 {
+	/** Root of program */
 	class Root : public GameFrameWork::Controller
 	{
 	public:
 		Root() : Controller() {}
 
 	public:
+		/** First Program Launch */
 		void Start();
+		
+		/** For Handle Events */
 		void Events();
+
+		/** Do something */
 		void Update();
+
+		/** Show into a display */
 		void Render();
+
+		/** Exit Program */
 		void Delete();
 	};
 }
