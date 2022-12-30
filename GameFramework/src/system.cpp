@@ -271,6 +271,14 @@ namespace GameFrameWork
 				if (this->tempEvent_ == SDL_WINDOWEVENT_CLOSE) {
 					System::HasFinish = true;
 				}
+
+				if (this->tempEvent_ == SDL_WINDOWEVENT_SIZE_CHANGED) {
+					int w, h;
+					SDL_GetWindowSize(System::Window, &w, &h);
+
+					System::Config.Size.Width = w;
+					System::Config.Size.Height = h;
+				}
 			} break;
 			}
 

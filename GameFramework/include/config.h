@@ -55,7 +55,7 @@ namespace GameFrameWork
 	struct Config_
 	{
 		std::string Title = "Game Framework";
-		bool ResizeWindow = false;
+		bool ResizeWindow = true;
 		
 		size_t FPS = 60;
 		SDL_Color Background = {
