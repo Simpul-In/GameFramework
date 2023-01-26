@@ -1,64 +1,70 @@
 #ifndef GAME_FRAMEWORK_TEXTURE_H_
 #define GAME_FRAMEWORK_TEXTURE_H_
 
+// File: GameFramework/include/texture.h
+
+// Standard Library - BEGIN
 #include <filesystem>
-#include <vector>
+// Standard Library - END
 
-// @third party code - BEGIN SDL2
+// @third party - BEGIN SDL2
 #include <SDL.h>
-// @third party code - END SDL2
+// @third party - END SDL2
 
-// @third party code - BEGIN ENTT
-#include <entt/entt.hpp>
-// @third party code - END ENTT
+// Include Header - BEGIN
+#include <GameFramework/include/app.h>
+#include <GameFramework/include/type.h>
+// Include Header - END
 
-#include "controller.h"
-#include "component.h"
-#include "typedef.h"
-
-namespace GameFrameWork
+namespace GameFramework
 {
-	class Texture : public Controller
+	struct CacheImage
+	{
+		std::filesystem::path path;
+		SDL_Surface* surface = nullptr;
+		SDL_Texture* texture = nullptr;
+	};
+
+	class Texture
 	{
 	public:
 		/**
-		 * Texture to load an image
-		 * @param path - Where the path of image file.
+		 * Load texture from file
+		 * @param path - where the path of file <std::filesystem::path <C++2a>>
 		 */
-		Texture(std::filesystem::path path);
+		Texture(App* app_, std::filesystem::path path_);
+		Texture(const Texture&) = default;
+
+	public:
+		/**
+		 * Reload texture
+		 * @warning this work if you change the path of texture
+		 */
+		void Reload();
+
+	public:
+		/**
+		 * Get texture <Image::Texture | SDL_Texture*>
+		 * @return Image::Texture
+		 */
+		Image::Texture GetTexture();
+
+		/**
+		 * Get surface <Image::Surface | SDL_Surface*>
+		 * @return Image::Texture
+		 */
+		Image::Surface GetSurface();
+
+	public:
+		/* Path to texture */
+		std::filesystem::path Path;
+
+		/* App */
+		App* App_ = nullptr;
 
 	private:
-		/**
-		 * To Check There A Same Texture Are Using
-		 * And Add Some Components
-		 * @param path - Where the path of image file.
-		 */
-		inline void Initialize(std::filesystem::path& path);
-
-	public:
-		/**
-		 * To Get A Surface <GameFrameWork::Surface> 
-		 * @return Surface <SDL_Surface*>
-		 */
-		Surface GetSurface();
-		
-		/**
-		 * To Get A Texture <GameFrameWork::TextureImage>
-		 * * @return TextureImage <SDL_Texture*>
-		 */
-		TextureImage GetTexture();
-
-	public:
-		/** Condition Of Texture (True <Good> | False <Bad>) */
-		bool Condition = true;
-		
-	private:
-		/** Check Is Copy Texture */
-		bool isCopy_ = false;
-
-	public:
-		/** Store Some Trash of Texture */
-		inline static std::vector<Component::Trash::Texture> Store;
+		SDL_Surface* surface_;
+		SDL_Texture* texture_;
 	};
 }
 

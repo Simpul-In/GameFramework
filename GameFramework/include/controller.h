@@ -1,18 +1,23 @@
 #ifndef GAME_FRAMEWORK_CONTROLLER_H_
 #define GAME_FRAMEWORK_CONTROLLER_H_
 
-#include <filesystem>
+// File: Controller/include/controller.h
 
-// @third party code - BEGIN ENTT
+// @third party - BEGIN ENTT
 #include <entt/entt.hpp>
-// @third party code - END ENTT
+// @third party - END ENTT
 
-namespace GameFrameWork
+// Include Header - BEGIN
+#include <GameFramework/include/app.h>
+#include <GameFramework/include/type.h>
+// Include Header - END
+
+namespace GameFramework
 {
 	class Controller
 	{
 	public:
-		Controller();
+		Controller(App* app);
 
 	public:
 		/**
@@ -23,7 +28,7 @@ namespace GameFrameWork
 		template <typename T, typename... Args>
 		T& AddComponent(Args&&... args)
 		{
-			return this->registry_->emplace<T>(this->entity_, 
+			return this->registry_->emplace<T>(this->entity_,
 				std::forward<Args>(args)...);
 		}
 
@@ -78,17 +83,9 @@ namespace GameFrameWork
 		 */
 		operator entt::entity() const { return this->entity_; }
 
-	protected:
-		/**
-		 * Join Target Path With Path Executable
-		 * @param path - Target Path will join with Path Executable
-		 * @return path had joined
-		 */
-		std::filesystem::path PathExecutable(std::filesystem::path path);
-
 	private:
-		entt::registry* registry_;
-		entt::entity entity_;
+		Registry* registry_;
+		Entity entity_;
 	};
 }
 

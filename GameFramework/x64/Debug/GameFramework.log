@@ -1,1 +1,11 @@
-﻿  GameFramework.vcxproj -> D:\Dev\GameFramework\x64\Debug\GameFramework.exe
+﻿  app.cpp
+  controller.cpp
+  font.cpp
+  grid.cpp
+  main.cpp
+  shape.cpp
+  system.cpp
+  text.cpp
+  texture.cpp
+  Generating Code...
+  GameFramework.vcxproj -> D:\Dev\GameFramework\x64\Debug\GameFramework.exe

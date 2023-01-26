@@ -1,102 +1,111 @@
+// File: GameFramework/src/texture.cpp
+
+// Standard Library - BEGIN
+#include <iostream>
 #include <filesystem>
+#include <vector>
 #include <utility>
+// Standard Library - END
 
 // @third party code - BEGIN OneAPI
 #include <oneapi/tbb.h>
 // @third party code - END OneAPI
 
-#include "../include/system.h"
-#include "../include/texture.h"
-#include "../include/config.h"
-#include "../include/component.h"
-#include "../include/storage.h"
+// @third party - BEGIN SDL2
+#include <SDL.h>
+#include <SDL_image.h>
+// @third party - END SDL2
 
-namespace GameFrameWork
+// Include Header - BEGIN
+#include <GameFramework/include/texture.h>
+#include <GameFramework/include/type.h>
+// Include Header - END
+
+// QUEUE Will be global
+std::vector<GameFramework::CacheImage> CACHE_IMAGE;
+std::vector<GameFramework::Image::Texture> TEXTURE_FREE_QUEUE;
+std::vector<GameFramework::Image::Surface> SURFACE_FREE_QUEUE;
+
+namespace GameFramework
 {
-	Texture::Texture(std::filesystem::path path)
-		: Controller()
-	{
-		this->Initialize(path);
-
-		auto& config = this->GetComponent<TextureConfig>();
-		config.Path = std::move(path);
-
-		if (!this->isCopy_)
-		{
-			// Setup
-			SDL_RWops* rwop;
-
-			// Get image
-			rwop = SDL_RWFromFile(
-				static_cast<const char*>(config.Path.string().c_str()),
-				"rb");
-			System::SurfaceFree[config.IdSurface] = IMG_LoadPNG_RW(rwop);
-			if (!System::SurfaceFree[config.IdSurface]) this->Condition = false;
-
-			if (!this->Condition)
-			{
-				Storage::PopSurface();
-				Storage::PopTexture();
-				return;
-			}
-
-			System::TextureFree[config.IdTexture] = SDL_CreateTextureFromSurface(
-				System::Renderer, System::SurfaceFree[config.IdSurface]);
-		}
-
-		// Get size of image
-		Component::Default::Size size = Component::Default::Size(
-			this->GetSurface()->w,
-			this->GetSurface()->h);
-
-		this->AddComponent<Component::Default::Size>(size);
+	Texture::Texture(App* app_, std::filesystem::path path_)
+		: Path(std::move(path_)), App_(app_) {
+		this->Reload();
 	}
 
-	void Texture::Initialize(std::filesystem::path& path)
+	void Texture::Reload()
 	{
-		auto& config = this->AddComponent<TextureConfig>();
+		bool textureIsExist = false;
 
-		this->isCopy_ = false;
-		oneapi::tbb::parallel_for(
-			oneapi::tbb::blocked_range<size_t>(0, Texture::Store.size()),
-			[&](const oneapi::tbb::blocked_range<size_t>& r) -> void
-			{
-				if (this->isCopy_) return;
-				for (size_t i = r.begin(); i != r.end(); ++i)
+		// Searching the same path
+		// This will be save memory
+		SDL_Surface* searchSurface = nullptr;
+		SDL_Texture* searchTexture = nullptr;
+		std::filesystem::path searchPath = this->Path;
+
+		// Map all chache of image, for search the same path
+		oneapi::tbb::parallel_for_each(CACHE_IMAGE.begin(), CACHE_IMAGE.end(),
+			[&](GameFramework::CacheImage& cache) -> void {
+				if (searchPath == cache.path)
 				{
-					if (Texture::Store[i].Path == path)
-					{
-						this->isCopy_ = true;
-						config.IdSurface = Texture::Store[i].IdSurface;
-						config.IdTexture = Texture::Store[i].IdTexture;
-						return;
-					}
+					textureIsExist = true;
+					searchSurface = cache.surface;
+					searchTexture = cache.texture;
 				}
 			});
 
-		if (!this->isCopy_)
+		// If not defined
+		if (!textureIsExist)
 		{
-			config.IdTexture = Storage::AddTexture(nullptr);
-			config.IdSurface = Storage::AddSurface(nullptr);
-		
-			Component::Trash::Texture trash;
-			trash.Path = path;
-			trash.IdSurface = config.IdSurface;
-			trash.IdTexture = config.IdTexture;
+			TEXTURE_FREE_QUEUE.push_back(nullptr);
+			size_t idxTexture = TEXTURE_FREE_QUEUE.size() - 1;
+			
+			SURFACE_FREE_QUEUE.push_back(nullptr);
+			size_t idxSurface = SURFACE_FREE_QUEUE.size() - 1;
 
-			Texture::Store.push_back(trash);
+			SDL_RWops* rwop;
+			rwop = SDL_RWFromFile(
+				static_cast<const char*>(this->Path.string().c_str()), "rb");
+
+			SURFACE_FREE_QUEUE[idxSurface] = IMG_LoadPNG_RW(rwop);
+			if (!SURFACE_FREE_QUEUE[idxSurface])
+			{
+				TEXTURE_FREE_QUEUE.erase(TEXTURE_FREE_QUEUE.begin() + idxTexture);
+				SURFACE_FREE_QUEUE.erase(SURFACE_FREE_QUEUE.begin() + idxSurface);
+			}
+			else
+			{
+				TEXTURE_FREE_QUEUE[idxTexture] = SDL_CreateTextureFromSurface(
+					this->App_->renderer, SURFACE_FREE_QUEUE[idxSurface]);
+
+				// set
+				this->surface_ = SURFACE_FREE_QUEUE[idxSurface];
+				this->texture_ = TEXTURE_FREE_QUEUE[idxTexture];
+
+				// add cache
+				CacheImage makeCacheImage;
+				makeCacheImage.path = this->Path;
+				makeCacheImage.texture = this->texture_;
+				makeCacheImage.surface = this->surface_;
+
+				CACHE_IMAGE.push_back(makeCacheImage);
+			}
+		}
+		else
+		{
+			// set
+			this->surface_ = searchSurface;
+			this->texture_ = searchTexture;
 		}
 	}
 
-	Surface Texture::GetSurface()
+	Image::Texture Texture::GetTexture()
 	{
-		auto& config = this->GetComponent<TextureConfig>();
-		return Storage::GetSurface(config.IdSurface);
+		return this->texture_;
 	}
 
-	TextureImage Texture::GetTexture()
+	Image::Surface Texture::GetSurface()
 	{
-		auto& config = this->GetComponent<TextureConfig>();
-		return Storage::GetTexture(config.IdTexture);
+		return this->surface_;
 	}
 }

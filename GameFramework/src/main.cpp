@@ -1,50 +1,26 @@
-#include <iostream>
+// File: GameFramework/src/main.cpp
 
-// @third party code - BEGIN SDL2
-#include <SDL.h>
-// @third party code - END SDL2
-
-#include "../include/config.h"
-#include "../include/system.h"
-
+// @System API - BEGIN WIN32
 #ifdef NDEBUG
 #include <Windows.h>
 #endif
+// @System API - END WIN32
 
-int main(int argc, char** argv)
+// Include Header - BEGIN
+#include <GameFramework/include/system.h>
+// Include Header - END
+
+// First gate, where the first function will be exec
+int main(int argc, const char* argv[])
 {
-	bool isGood = true;
-	GameFrameWork::Config_ config;
-	GameFrameWork::System system = GameFrameWork::System(
-		/* config= */config, /* argv= */argv);
-
-	system.Initialize();
-
-	// Create window and renderer
-	system.CreateWindow_();
-	system.CreateRenderer();
-
-	// Check is ok
-	if (!system.CheckIsGood())
-	{
-		std::cout << "Error: " << SDL_GetError() << std::endl;
-		isGood = false;
-	}
-
-	// Run code
-	if (isGood)
-	{
-		system.Run();
-	}
-
-	system.Exit();
-	{
-		(void)argc;
-		(void)argv;
-	}
+	// Start
+	GameFramework::System system = GameFramework::System(argv);
+	
+	// End
 	return 0;
 }
 
+// If compile with "Release" mode
 #ifdef NDEBUG
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	PSTR lpCmdLine, INT nCmdShow)

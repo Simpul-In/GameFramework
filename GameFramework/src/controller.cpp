@@ -1,16 +1,18 @@
-#include "../include/system.h"
-#include "../include/controller.h"
+// File: GameFramework/src/controller.cpp
 
-namespace GameFrameWork
+// @third party - BEGIN ENTT
+#include <entt/entt.hpp>
+// @third party - END ENTT
+
+// Include Header - BEGIN
+#include <GameFramework/include/controller.h>
+// Include Header - END
+
+namespace GameFramework
 {
-	Controller::Controller()
-		: entity_(System::Registry.create())
+	Controller::Controller(App* app)
 	{
-		this->registry_ = &System::Registry;
-	}
-
-	std::filesystem::path Controller::PathExecutable(std::filesystem::path path)
-	{
-		return (System::PathExecutable / path);
+		this->registry_ = &app->registry;
+		this->entity_ = this->registry_->create();
 	}
 }
